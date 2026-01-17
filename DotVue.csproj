@@ -10,13 +10,20 @@
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <IsPackable>true</IsPackable>
     <PackageId>DotVue</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Bdiwy</Authors>
     <Description>Render Vue templates in .NET</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views/**/*.cshtml">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles/any/any/Views;content/Views</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>
