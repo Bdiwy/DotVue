@@ -14,24 +14,25 @@ public class DotVueTagHelper : TagHelper
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "div";
-        output.Attributes.SetAttribute("id", "vueApp"); 
-        var component = ViewContext.ViewData["DotVue_Component"]?.ToString() ?? "";
-        var data = ViewContext.ViewData["DotVue_Data"]?.ToString() ?? "{}";
+        output.Attributes.SetAttribute("id", "vueApp");
 
-        if (!string.IsNullOrEmpty(component))
-        {
-            var script = $@"
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {{
-                        if (typeof initVuePage === 'function') {{
-                            initVuePage('{component}', {data});
-                        }} else {{
-                            console.error('DotVue: initVuePage is not defined. Make sure vueHandler.js is loaded.');
-                        }}
-                    }});
-                </script>";
+        var scripts = @"
+            <script src='_content/DotVue/js/vue.global.js'></script>
+            <script src='_content/DotVue/js/vue3-sfc-loader.js'></script>
+            <script src='_content/DotVue/js/vueHandler.js'></script>";
 
-            output.PostElement.AppendHtml(script);
-        }
+        var component = ViewContext.ViewData["DotVue_Component"] ?? "";
+        var data = ViewContext.ViewData["DotVue_Data"] ?? "{}";
+
+        var initScript = $@"
+            <script>
+                window.addEventListener('load', () => {{
+                    if (typeof initVuePage === 'function') 
+                        initVuePage('{component}', {data});
+                }});
+            </script>";
+
+        output.PostElement.AppendHtml(scripts);
+        output.PostElement.AppendHtml(initScript);
     }
 }
